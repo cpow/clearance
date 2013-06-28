@@ -232,6 +232,7 @@ To override the model, redefine public methods:
 
     .authenticate(email, password)
     #forgot_password!
+    #password_optional?
     #reset_remember_token!
     #update_password(new_password)
 
@@ -241,7 +242,6 @@ Or, redefine private methods:
     #generate_confirmation_token
     #generate_remember_token
     #normalize_email
-    #password_optional?
 
 Overriding the password strategy
 --------------------------------

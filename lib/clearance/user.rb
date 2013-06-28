@@ -20,7 +20,7 @@ module Clearance
     module ClassMethods
       def authenticate(email, password)
         if user = find_by_normalized_email(email)
-          if user.authenticated? password
+          if user.password_optional? || user.authenticated?(password)
             return user
           end
         end
@@ -63,6 +63,10 @@ module Clearance
       save :validate => false
     end
 
+    def password_optional?
+      encrypted_password.present? && password.blank? && password_changing.blank?
+    end
+
     def reset_remember_token!
       generate_remember_token
       save :validate => false
@@ -96,10 +100,6 @@ module Clearance
 
     def generate_remember_token
       self.remember_token = SecureRandom.hex(20).encode('UTF-8')
-    end
-
-    def password_optional?
-      encrypted_password.present? && password.blank? && password_changing.blank?
     end
   end
 end

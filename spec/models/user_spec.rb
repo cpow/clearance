@@ -169,6 +169,12 @@ describe User do
 
     it { should allow_value(nil).for(:password) }
     it { should allow_value('').for(:password) }
+
+    it 'can authenticate with blank password' do
+      User.stubs(find_by_normalized_email: @user)
+
+      User.authenticate(@user.email, '').should eq(@user)
+    end
   end
 
   describe 'user factory' do
