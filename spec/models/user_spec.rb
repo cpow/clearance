@@ -156,20 +156,19 @@ describe User do
 
   describe 'a user with an optional password' do
     before do
-      @user = User.new(email: 'user@example.com')
-      User.any_instance.stubs(password_optional?: true)
+      @user = UserWithOptionalPassword.new
     end
 
     subject { @user }
-
     it { should allow_value(nil).for(:password) }
     it { should allow_value('').for(:password) }
 
     it 'can authenticate with blank password' do
+      @user.email = 'testuser@example.com'
       @user.encrypted_password = 'testpasword'
       @user.save!
 
-      User.authenticate(@user.email, '').should eq(@user)
+      UserWithOptionalPassword.authenticate(@user.email, '').should eq(@user)
     end
   end
 

@@ -11,6 +11,12 @@ class User < ActiveRecord::Base
   include Clearance::User
 end
 
+class UserWithOptionalPassword < User
+  def password_optional?
+    true
+  end
+end
+
 module Clearance
   module Test
     module Redirects
