@@ -45,7 +45,7 @@ module Clearance
           uniqueness: { allow_blank: true },
           unless: :email_optional?
 
-        validates :password, presence: true, unless: :password_optional?
+        validates :password, presence: true, unless: :skip_password_validation?
       end
     end
 
@@ -61,10 +61,6 @@ module Clearance
     def forgot_password!
       generate_confirmation_token
       save :validate => false
-    end
-
-    def password_optional?
-      encrypted_password.present? && password.blank? && password_changing.blank?
     end
 
     def reset_remember_token!
@@ -84,7 +80,16 @@ module Clearance
       save
     end
 
+    def password_optional?
+      false
+    end
+
     private
+
+    def skip_password_validation?
+      password_optional? || (encrypted_password.present? && !password_changing)
+    end
+
 
     def normalize_email
       self.email = self.class.normalize_email(email)

@@ -42,7 +42,7 @@ describe User do
       @user.should be_authenticated(@password)
     end
 
-    it 'is authenticated with incorrect credentials' do
+    it 'is not authenticated with incorrect credentials' do
       User.authenticate(@user.email, 'bad_password').should be_nil
       @user.should_not be_authenticated('bad password')
     end
